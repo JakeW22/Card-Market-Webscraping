@@ -1,0 +1,8 @@
+{
+    "python.linting.pylintArgs": [
+        "--extension-pkg-whitelist=pygame",
+        "-d",
+        "C0301",
+        "--load-plugins"
+    ]
+}
