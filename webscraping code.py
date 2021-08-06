@@ -1,3 +1,4 @@
+from os import write
 from bs4 import BeautifulSoup, element
 import mechanicalsoup
 import mechanicalsoup.stateful_browser
@@ -129,4 +130,10 @@ for links in href_links:
     time.sleep(3)
 
 
-
+# Now write a csv file with the contents of each page:
+with open('persons.csv', 'wb') as csvfile:
+    filewriter = csv.writer(csvfile, delimiter=',',
+    quotechar='|', quoting=csv.QUOTE_MINIMAL)
+    filewriter.writerow(["Seller Name", "Seller Reputation", "Card Quality", "Card Price"])
+    filewriter.writerows(output_name, output_reputation, output_quality, output_price)
+ 
