@@ -5,6 +5,7 @@ from urllib.request import urlopen
 import requests
 import time
 import re
+import csv
 
 # Create stateful browser:
 browser = mechanicalsoup.StatefulBrowser(soup_config={'features': 'lxml'},
@@ -90,6 +91,7 @@ href_link = "/en/Magic/Cards/Bloodstained-Mire"
 #print(browser.follow_link(href_link))
 #print(browser.url)
 condition = ("Near Mint", "Excellent", "Good")
+credit = ("Outstanding", "Very good")
 user_link = "/en/Magic/Users/"
 pattern = re.compile("<.*?>")
 for links in href_links:
@@ -100,46 +102,31 @@ for links in href_links:
     new_page = browser.page
     all_text = new_page.find("div", class_="table-body")
     link_count = 0
+
     for quality in new_page:
         new_page.find("div", class_="table-body")
         quality = new_page.find_all(attrs={"data-original-title" : condition})
         output_quality = [x["data-original-title"] for x in quality]
+
+    user = new_page.find_all("a", href=re.compile(user_link))
+    for seller_name in user:    
+        output_name = seller_name.text
+        print(output_name)
     
     for reputation in new_page:
-        new_page.find("div", class_="table-body")
-        reputation = new_page.find_all(attrs={"data-original-title": pattern})
+        reputation = new_page.find_all(attrs={"data-original-title" : credit})
         output_reputation = [x["data-original-title"] for x in reputation]
-    
-    for price in new_page:
-        new_page.find("div", class_="table-body")
-        price = new_page.find_all("span", attrs="font-weight-bold color-primary small text-right text-nowrap")
-        output_price = [x["font-weight-bold color-primary small text-right text-nowrap"] for x in price]
-        #output_price = 
-    #print(output_quality)
-    #print(output_reputation)
-    print(output_price)    
-    #print(seller.text)
-    #for new_page_link in all_text:
-    #    link_count += 1
+
+    spans =  new_page.find_all("span", class_="font-weight-bold color-primary small text-right text-nowrap")
+    for price in spans:
+        output_price = price.text
+        print(output_price)
+
+    print(output_quality)
+    print(output_reputation)
         
-    #print(link_count)
+    # Time break between each loop to prevent being locked out from website
     time.sleep(3)
 
 
-# Changing from Stateful_Browser to Beautiful Soup Object:
 
-#output1 = [x["data-original-title"] for x in excellent_condition]
-#    print(output1)
-#    good_condition = new_page.find_all(attrs={"data-original-title" : "Good"})
-#    output2 = [x["data-original-title"] for x in good_condition]
-#    print(output2)
-#    nm_condition = new_page.find_all(attrs={"data-original-title" : "Near Mint"})
-#    output3 = [x["data-original-title"] for x in nm_condition]
-#    print(output3)
-
-# Trying to get the text of the link for seller:
-#for seller in new_page.find("div", class_="table-body"):
-#        seller = new_page.find("a")
-#        print(''.join(seller.find_all(text=True)))
-
-#'<span class="font-weight-bold color-primary small text-right text-nowrap">29,95 €</span>"'
