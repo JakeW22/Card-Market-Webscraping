@@ -3,3 +3,4 @@ MechanicalSoup
 wheel
 BeautifulSoup4
 lxml
+pandas

@@ -95,6 +95,9 @@ condition = ("Near Mint", "Excellent", "Good")
 credit = ("Outstanding", "Very good")
 user_link = "/en/Magic/Users/"
 pattern = re.compile("<.*?>")
+price_list = []
+seller_list = []
+
 for links in href_links:
     print(links)
     print(page.find_all("a", href = links)) 
@@ -112,7 +115,8 @@ for links in href_links:
     user = new_page.find_all("a", href=re.compile(user_link))
     for seller_name in user:    
         output_name = seller_name.text
-        print(output_name)
+        seller_list.append(output_name)
+        #print(output_name)
     
     for reputation in new_page:
         reputation = new_page.find_all(attrs={"data-original-title" : credit})
@@ -121,19 +125,25 @@ for links in href_links:
     spans =  new_page.find_all("span", class_="font-weight-bold color-primary small text-right text-nowrap")
     for price in spans:
         output_price = price.text
-        print(output_price)
-
+        price_list.append(output_price)
+        #print(output_price)
+    
+    print(seller_list)
     print(output_quality)
     print(output_reputation)
-        
+    print(price_list)    
     # Time break between each loop to prevent being locked out from website
     time.sleep(3)
 
-
+loop_num = 0
 # Now write a csv file with the contents of each page:
-with open('persons.csv', 'wb') as csvfile:
+with open('Magic Card 1.csv', 'w', encoding='UTF8', newline='') as csvfile:
     filewriter = csv.writer(csvfile, delimiter=',',
     quotechar='|', quoting=csv.QUOTE_MINIMAL)
     filewriter.writerow(["Seller Name", "Seller Reputation", "Card Quality", "Card Price"])
-    filewriter.writerows(output_name, output_reputation, output_quality, output_price)
+    filewriter.writerows(output_name)
+    filewriter.writerows(output_reputation)
+    filewriter.writerows(output_quality)
+    filewriter.writerows(output_price)
+    loop_num += 1
  
